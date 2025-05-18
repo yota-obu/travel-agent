@@ -114,30 +114,24 @@ ${recommended_transport}
 ### 交通手段の詳細比較
 #### 新幹線・電車での移動
 - **所要時間**: ${train_duration}
-- **概算費用**: ${train_cost}（${train_cost_per}あたり・往復）
 - **メリット**: ${train_pros}
 - **デメリット**: ${train_cons}
 
 #### 飛行機での移動
 - **所要時間**: ${plane_duration}
-- **概算費用**: ${plane_cost}（${plane_cost_per}あたり・往復）
 - **メリット**: ${plane_pros}
 - **デメリット**: ${plane_cons}
 
 #### レンタカーでの移動
 - **所要時間**: ${car_duration}
-- **概算費用**: ${car_cost}（${car_cost_per}あたり・往復）
 - **メリット**: ${car_pros}
 - **デメリット**: ${car_cons}
 
-## 宿泊施設
-### 基本情報
-- **施設名**: ${hotel_name}
-- **タイプ**: ${hotel_type}
-- **予算目安**: ${hotel_budget}円（1泊あたり）
-- **特徴**: ${hotel_features}
+## 宿泊グレード
+**選択されたグレード**: ${accommodation_grade}
+**グレード詳細**: ${grade_description}
 
-### 詳細情報
+## 宿泊施設
 ${hotel_details}
 
 ## 観光プラン
@@ -146,78 +140,322 @@ ${hotel_details}
 ${day1_morning_desc}
 
 **見どころ**: ${day1_morning_highlights}  
-**所要時間**: ${day1_morning_duration}  
-**予算目安**: ${day1_morning_budget}円
+**所要時間**: ${day1_morning_duration}
 
 #### 午後（${day1_afternoon_time}）
 ${day1_afternoon_desc}
 
 **見どころ**: ${day1_afternoon_highlights}  
-**所要時間**: ${day1_afternoon_duration}  
-**予算目安**: ${day1_afternoon_budget}円
+**所要時間**: ${day1_afternoon_duration}
 
 #### 夜（${day1_evening_time}）
 ${day1_evening_desc}
 
 **見どころ**: ${day1_evening_highlights}  
-**所要時間**: ${day1_evening_duration}  
-**予算目安**: ${day1_evening_budget}円
+**所要時間**: ${day1_evening_duration}
 
 ### 2日目
 #### 午前（${day2_morning_time}）
 ${day2_morning_desc}
 
 **見どころ**: ${day2_morning_highlights}  
-**所要時間**: ${day2_morning_duration}  
-**予算目安**: ${day2_morning_budget}円
+**所要時間**: ${day2_morning_duration}
 
 #### 午後（${day2_afternoon_time}）
 ${day2_afternoon_desc}
 
 **見どころ**: ${day2_afternoon_highlights}  
-**所要時間**: ${day2_afternoon_duration}  
-**予算目安**: ${day2_afternoon_budget}円
+**所要時間**: ${day2_afternoon_duration}
 
 #### 夜（${day2_evening_time}）
 ${day2_evening_desc}
 
 **見どころ**: ${day2_evening_highlights}  
-**所要時間**: ${day2_evening_duration}  
-**予算目安**: ${day2_evening_budget}円
+**所要時間**: ${day2_evening_duration}"""
 
-## 予算配分
-| 項目 | 金額 |
-|------|------|
-| 交通費 | ${transport_budget}円 |
-| 宿泊費 | ${accommodation_budget}円 |
-| 食事代 | ${food_budget}円 |
-| 観光・アクティビティ | ${activity_budget}円 |
-| 予備費 | ${extra_budget}円 |
-| **合計** | ${total_budget}円 |"""
+# 出発地（都道府県）の選択肢を定義
+DEPARTURE_PREFECTURES = [
+    {
+        "id": "hokkaido",
+        "name": "北海道",
+        "region": "北海道"
+    },
+    {
+        "id": "aomori",
+        "name": "青森県",
+        "region": "東北"
+    },
+    {
+        "id": "iwate",
+        "name": "岩手県",
+        "region": "東北"
+    },
+    {
+        "id": "miyagi",
+        "name": "宮城県",
+        "region": "東北"
+    },
+    {
+        "id": "akita",
+        "name": "秋田県",
+        "region": "東北"
+    },
+    {
+        "id": "yamagata",
+        "name": "山形県",
+        "region": "東北"
+    },
+    {
+        "id": "fukushima",
+        "name": "福島県",
+        "region": "東北"
+    },
+    {
+        "id": "ibaraki",
+        "name": "茨城県",
+        "region": "関東"
+    },
+    {
+        "id": "tochigi",
+        "name": "栃木県",
+        "region": "関東"
+    },
+    {
+        "id": "gunma",
+        "name": "群馬県",
+        "region": "関東"
+    },
+    {
+        "id": "saitama",
+        "name": "埼玉県",
+        "region": "関東"
+    },
+    {
+        "id": "chiba",
+        "name": "千葉県",
+        "region": "関東"
+    },
+    {
+        "id": "tokyo",
+        "name": "東京都",
+        "region": "関東"
+    },
+    {
+        "id": "kanagawa",
+        "name": "神奈川県",
+        "region": "関東"
+    },
+    {
+        "id": "niigata",
+        "name": "新潟県",
+        "region": "中部"
+    },
+    {
+        "id": "toyama",
+        "name": "富山県",
+        "region": "中部"
+    },
+    {
+        "id": "ishikawa",
+        "name": "石川県",
+        "region": "中部"
+    },
+    {
+        "id": "fukui",
+        "name": "福井県",
+        "region": "中部"
+    },
+    {
+        "id": "yamanashi",
+        "name": "山梨県",
+        "region": "中部"
+    },
+    {
+        "id": "nagano",
+        "name": "長野県",
+        "region": "中部"
+    },
+    {
+        "id": "gifu",
+        "name": "岐阜県",
+        "region": "中部"
+    },
+    {
+        "id": "shizuoka",
+        "name": "静岡県",
+        "region": "中部"
+    },
+    {
+        "id": "aichi",
+        "name": "愛知県",
+        "region": "中部"
+    },
+    {
+        "id": "mie",
+        "name": "三重県",
+        "region": "関西"
+    },
+    {
+        "id": "shiga",
+        "name": "滋賀県",
+        "region": "関西"
+    },
+    {
+        "id": "kyoto",
+        "name": "京都府",
+        "region": "関西"
+    },
+    {
+        "id": "osaka",
+        "name": "大阪府",
+        "region": "関西"
+    },
+    {
+        "id": "hyogo",
+        "name": "兵庫県",
+        "region": "関西"
+    },
+    {
+        "id": "nara",
+        "name": "奈良県",
+        "region": "関西"
+    },
+    {
+        "id": "wakayama",
+        "name": "和歌山県",
+        "region": "関西"
+    },
+    {
+        "id": "tottori",
+        "name": "鳥取県",
+        "region": "中国"
+    },
+    {
+        "id": "shimane",
+        "name": "島根県",
+        "region": "中国"
+    },
+    {
+        "id": "okayama",
+        "name": "岡山県",
+        "region": "中国"
+    },
+    {
+        "id": "hiroshima",
+        "name": "広島県",
+        "region": "中国"
+    },
+    {
+        "id": "yamaguchi",
+        "name": "山口県",
+        "region": "中国"
+    },
+    {
+        "id": "tokushima",
+        "name": "徳島県",
+        "region": "四国"
+    },
+    {
+        "id": "kagawa",
+        "name": "香川県",
+        "region": "四国"
+    },
+    {
+        "id": "ehime",
+        "name": "愛媛県",
+        "region": "四国"
+    },
+    {
+        "id": "kochi",
+        "name": "高知県",
+        "region": "四国"
+    },
+    {
+        "id": "fukuoka",
+        "name": "福岡県",
+        "region": "九州"
+    },
+    {
+        "id": "saga",
+        "name": "佐賀県",
+        "region": "九州"
+    },
+    {
+        "id": "nagasaki",
+        "name": "長崎県",
+        "region": "九州"
+    },
+    {
+        "id": "kumamoto",
+        "name": "熊本県",
+        "region": "九州"
+    },
+    {
+        "id": "oita",
+        "name": "大分県",
+        "region": "九州"
+    },
+    {
+        "id": "miyazaki",
+        "name": "宮崎県",
+        "region": "九州"
+    },
+    {
+        "id": "kagoshima",
+        "name": "鹿児島県",
+        "region": "九州"
+    },
+    {
+        "id": "okinawa",
+        "name": "沖縄県",
+        "region": "沖縄"
+    }
+]
+
+def get_departure_prefectures() -> List[Dict]:
+    """出発地（都道府県）の選択肢を取得する"""
+    return DEPARTURE_PREFECTURES
 
 def clean_response_text(text: str) -> str:
     """Gemini APIのレスポンステキストをクリーンアップする"""
     try:
-        # コードブロックの削除
+        # テキストの前処理
         text = text.strip()
-        if text.startswith("```json"):
-            text = text[7:]
-        elif text.startswith("```"):
-            text = text[3:]
-        if text.endswith("```"):
-            text = text[:-3]
+        
+        # JSONブロックの抽出
+        if "```json" in text:
+            # JSONブロックの開始と終了を見つける
+            start = text.find("```json") + 7
+            end = text.find("```", start)
+            if end != -1:
+                text = text[start:end]
+        elif "```" in text:
+            # 一般的なコードブロックの処理
+            start = text.find("```") + 3
+            end = text.find("```", start)
+            if end != -1:
+                text = text[start:end]
         
         # 余分な空白と改行の削除
         text = text.strip()
         
-        # JSONとして解析できるか確認
-        json.loads(text)
-        
-        return text
+        # JSONとして解析
+        try:
+            # 最初にJSONとして解析を試みる
+            return json.dumps(json.loads(text), ensure_ascii=False)
+        except json.JSONDecodeError:
+            # 文字列内のエスケープ処理
+            text = text.replace('\n', '\\n').replace('\r', '\\r')
+            # 再度JSONとして解析
+            return json.dumps(json.loads(text), ensure_ascii=False)
+            
     except json.JSONDecodeError as e:
         logger.error(f"JSONパースエラー: {str(e)}")
         logger.error(f"パース対象のテキスト: {text}")
         raise ValidationError("レスポンスのJSON形式が不正です", details={'error': str(e), 'text': text})
+    except Exception as e:
+        logger.error(f"予期せぬエラー: {str(e)}")
+        raise ValidationError("レスポンスの処理中にエラーが発生しました", details={'error': str(e), 'text': text})
 
 @retry(
     stop=stop_after_attempt(3),
@@ -289,17 +527,6 @@ def validate_travel_plan(plan_data: Dict) -> Tuple[bool, Optional[Dict]]:
             logger.error(f"必須フィールドが不足: {missing_fields}")
             errors['missing_fields'] = missing_fields
         
-        # ホテル予算のバリデーション（宿泊がある場合のみ）
-        if plan_data.get('hotel_budget') is not None:
-            try:
-                hotel_budget = int(str(plan_data.get("hotel_budget", "0")).replace(",", "").replace("円", ""))
-                if hotel_budget < 0:  # 0円は許可する
-                    logger.error(f"不正なホテル予算: {hotel_budget}")
-                    errors['hotel_budget'] = "ホテル予算が不正です"
-            except (ValueError, TypeError) as e:
-                logger.error(f"ホテル予算の変換エラー: {str(e)}")
-                errors['hotel_budget'] = "ホテル予算は数値で指定してください"
-        
         # 時間形式のバリデーション
         time_fields = [
             "day1_morning_time",
@@ -367,194 +594,198 @@ def analyze_group_preferences(members: List[Dict]) -> Dict[str, float]:
     
     return scores
 
-def suggest_destinations(departure: str, month: int, scores: Dict[str, float]) -> str:
-    """グループの特性と条件に基づいて目的地を提案する"""
-    prompt = f"""
-以下の条件に基づいて、最適な旅行先を1つ提案してください。
-提案は具体的な地名（市町村レベル）で、理由も含めて返してください。
-
-出発地: {departure}
-旅行月: {month}月
-
-グループの特性スコア（0-1のスケール）:
-アクティビティ志向: {scores['activity']:.2f}
-文化的活動志向: {scores['culture']:.2f}
-自然志向: {scores['nature']:.2f}
-都市的活動志向: {scores['urban']:.2f}
-リラックス志向: {scores['relaxation']:.2f}
-
-注意点：
-1. 季節に適した目的地を選んでください
-2. 出発地からのアクセスを考慮してください
-3. グループの特性スコアを重視してください
-4. 具体的な地名を1つだけ提案してください
-"""
-    
+def suggest_destinations(departure: str, departure_region: str, preferences: Dict[str, float]) -> Dict[str, str]:
+    """目的地を提案する"""
     try:
+        logger.info(f"目的地提案を開始 - 出発地: {departure}, 地方: {departure_region}")
+        logger.info(f"選好度: {json.dumps(preferences, ensure_ascii=False)}")
+
+        # 選好度に基づいて目的地タイプを決定
+        destination_types = []
+        if preferences['nature'] > 0.4:
+            destination_types.extend([
+                "自然豊かな観光地",
+                "国立公園や自然公園がある地域",
+                "山や海に囲まれた観光地"
+            ])
+        if preferences['culture'] > 0.4:
+            destination_types.extend([
+                "歴史的・文化的な観光地",
+                "伝統工芸や伝統芸能が盛んな地域",
+                "歴史的建造物が多い地域"
+            ])
+        if preferences['urban'] > 0.4:
+            destination_types.extend([
+                "都市型観光地",
+                "近代的な施設が充実した地域",
+                "ショッピングや娯楽施設が豊富な地域"
+            ])
+        if preferences['relaxation'] > 0.4:
+            destination_types.extend([
+                "リラックスできる観光地",
+                "温泉地や保養地",
+                "のんびりと過ごせる地域"
+            ])
+        if not destination_types:
+            destination_types = [
+                "バランスの取れた観光地",
+                "多様な魅力がある地域",
+                "観光資源が豊富な地域"
+            ]
+
+        # ランダムに2つのタイプを選択して組み合わせる
+        selected_types = random.sample(destination_types, min(2, len(destination_types)))
+        destination_type = " かつ ".join(selected_types)
+
+        # 地方のマッピング
+        region_mapping = {
+            "北海道": ["北海道"],
+            "東北": ["青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県"],
+            "関東": ["茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県"],
+            "中部": ["新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県", "静岡県", "愛知県"],
+            "関西": ["三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県"],
+            "中国": ["鳥取県", "島根県", "岡山県", "広島県", "山口県"],
+            "四国": ["徳島県", "香川県", "愛媛県", "高知県"],
+            "九州": ["福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県"],
+            "沖縄": ["沖縄県"]
+        }
+
+        prompt = f"""
+以下の条件に基づいて、具体的な観光地を1つ提案してください。
+必ずJSON形式で返してください。
+
+条件：
+1. 以下の地域は除外してください：
+   - {departure}がある都道府県
+   - {departure_region}地方の全ての都道府県（{', '.join(region_mapping.get(departure_region, []))}）
+2. {destination_type}を優先的に提案
+3. 具体的な市区町村名を提案（例：「金沢市」「函館市」「松江市」「高山市」「別府市」など）
+4. 観光地としての知名度が高く、アクセスが比較的容易な場所を選ぶ
+5. 以下のような場所を含めることができます：
+   - 世界遺産や国宝がある都市
+   - 伝統的な祭りや行事で有名な都市
+   - 特徴的な食文化がある都市
+   - 独自の文化や芸術が息づく都市
+   - 美しい自然景観で知られる都市
+
+以下の形式で返してください：
+{{
+    "destination": "具体的な市区町村名",
+    "prefecture": "都道府県名"
+}}
+"""
+
+        response = model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.7,  # より多様な提案を得るために温度を上げる
+                max_output_tokens=150,
+                top_p=0.8,
+                top_k=40
+            )
+        )
+
+        response_text = clean_response_text(response.text)
+        destination_data = json.loads(response_text)
+        
+        destination = destination_data["destination"]
+        suggested_prefecture = destination_data.get("prefecture", "")
+
+        # 出発地と同じ地方の目的地をチェック
+        departure_region_prefectures = region_mapping.get(departure_region, [])
+        if (
+            departure.lower() in destination.lower() or
+            departure.lower() in suggested_prefecture.lower() or
+            any(pref.lower() in destination.lower() for pref in departure_region_prefectures) or
+            any(pref.lower() in suggested_prefecture.lower() for pref in departure_region_prefectures)
+        ):
+            logger.warning(f"提案された目的地（{destination}）が出発地と同じ地方です。再試行します。")
+            return suggest_destinations(departure, departure_region, preferences)
+
+        logger.info(f"提案された目的地: {destination} ({suggested_prefecture})")
+        return {
+            "destination": destination,
+            "prefecture": suggested_prefecture
+        }
+
+    except Exception as e:
+        logger.error(f"目的地提案でエラー: {str(e)}")
+        raise ValidationError("目的地の提案に失敗しました", details={'error': str(e)})
+
+def get_location_details(destination: str) -> Dict:
+    """目的地の詳細な位置情報を取得する"""
+    try:
+        # 目的地の詳細情報を取得するためのプロンプト
+        prompt = f"""
+以下の観光地について、都道府県名を返してください：
+
+観光地: {destination}
+
+以下の形式で返してください：
+{{
+    "prefecture": "都道府県名（例：「東京都」「京都府」など）"
+}}
+"""
         response = model.generate_content(
             prompt,
             generation_config=genai.types.GenerationConfig(
                 temperature=0.2,
-                max_output_tokens=150,
-                #top_p=0.8,
-                #top_k=40
+                max_output_tokens=150
             )
         )
-        return response.text.strip()
+        
+        location_data = json.loads(clean_response_text(response.text))
+        logger.info(f"取得した位置情報: {json.dumps(location_data, ensure_ascii=False)}")
+        
+        return {
+            "prefecture": location_data.get("prefecture", "")
+        }
     except Exception as e:
-        logger.error(f"目的地提案でエラーが発生: {str(e)}")
-        return "東京"  # デフォルトの目的地
+        logger.error(f"位置情報の取得でエラー: {str(e)}")
+        return {
+            "prefecture": ""
+        }
 
-def get_hotel_recommendations(location: str, max_price_level: int = 3, budget_per_night: int = None) -> List[Dict]:
-    """Google Maps APIを使用してホテルを検索する"""
+def get_hotel_recommendations(location: str, max_price_level: int) -> List[Dict]:
+    """
+    指定された場所と宿泊グレードに基づいてホテルを検索する
+    
+    Args:
+        location (str): 検索場所
+        max_price_level (int): 最大価格レベル
+    
+    Returns:
+        List[Dict]: ホテル情報のリスト
+    
+    Raises:
+        ValidationError: 無効な宿泊グレードが指定された場合
+    """
+    if not location:
+        raise ValidationError("検索場所を指定してください")
+        
     try:
-        # 場所の検索
-        geocode_result = gmaps.geocode(location)
-        if not geocode_result:
-            logger.error(f"場所が見つかりません: {location}")
-            # 都道府県レベルで再検索
-            prefecture = location.split()[0]  # 最初の都道府県名を取得
-            geocode_result = gmaps.geocode(prefecture)
-            if not geocode_result:
-                logger.error(f"都道府県も見つかりません: {prefecture}")
-                return []
-
-        location_lat_lng = geocode_result[0]['geometry']['location']
+        # Google Places APIを使用してホテルを検索
+        places_result = gmaps.places(
+            query=f"ホテル {location}",
+            type="lodging",
+            language="ja"
+        )
         
-        # 予算に応じた検索条件の設定
-        search_params = []
-        if budget_per_night:
-            if budget_per_night < 20000:  # 1万円未満：格安プラン
-                search_params = [
-                    {'keyword': 'ビジネスホテル', 'radius': 20000},
-                    {'keyword': '民宿', 'radius': 30000},
-                    {'keyword': '格安ホテル', 'radius': 20000}
-                ]
-            elif budget_per_night < 50000:  # 3万円未満：標準プラン
-                search_params = [
-                    {'keyword': '温泉旅館', 'radius': 20000},
-                    {'keyword': '旅館', 'radius': 30000},
-                    {'keyword': 'ホテル', 'radius': 20000}
-                ]
-            else:  # 3万円以上：高級プラン
-                search_params = [
-                    {'keyword': '高級温泉旅館', 'radius': 30000},
-                    {'keyword': 'リゾートホテル', 'radius': 40000},
-                    {'keyword': '高級ホテル', 'radius': 30000}
-                ]
-        else:  # 予算指定なし：標準プラン
-            search_params = [
-                {'keyword': '温泉旅館', 'radius': 20000},
-                {'keyword': 'ホテル', 'radius': 30000},
-                {'keyword': '旅館', 'radius': 20000}
-            ]
-
         hotels = []
-        seen_hotels = set()  # 重複チェック用
-
-        for param in search_params:
-            try:
-                logger.info(f"検索条件: {param}")
-                # ホテルの検索
-                places_result = gmaps.places_nearby(
-                    location=location_lat_lng,
-                    radius=param['radius'],
-                    type='lodging',
-                    keyword=param['keyword'],
-                    language='ja'
-                )
-
-                if not places_result.get('results'):
-                    logger.warning(f"検索条件 {param} で結果が見つかりませんでした")
-                    continue
-
-                logger.info(f"検索結果件数: {len(places_result.get('results', []))}")
-
-                for place in places_result.get('results', []):
-                    if len(hotels) >= 5:  # 最大5件まで
-                        break
-
-                    try:
-                        # 場所の詳細情報を取得
-                        details = get_hotel_details(place['place_id'])
-                        if not details:
-                            logger.warning(f"ホテル詳細が取得できませんでした: {place.get('name', '不明')}")
-                            continue
-
-                        # 重複チェック
-                        if details.get('name') in seen_hotels:
-                            continue
-                        seen_hotels.add(details.get('name'))
-
-                        # 評価数が少ないものはスキップ
-                        if details.get('user_ratings_total', 0) < 50:  # 最小評価数を増やす
-                            continue
-
-                        # 評価が低いものはスキップ
-                        if details.get('rating', 0) < 3.5:  # 最小評価を設定
-                            continue
-
-                        hotel = {
-                            'name': details.get('name', ''),
-                            'rating': details.get('rating', 0),
-                            'price_level': details.get('price_level', 2),
-                            'formatted_address': details.get('formatted_address', ''),
-                            'website': details.get('website', ''),
-                            'phone': details.get('formatted_phone_number', ''),
-                            'total_ratings': details.get('user_ratings_total', 0),
-                            'photos': [],
-                            'reviews': []
-                        }
-
-                        # 写真の取得（最大3枚）
-                        if 'photos' in details:
-                            for photo in details['photos'][:3]:
-                                photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo['photo_reference']}&key={GOOGLE_MAPS_API_KEY}"
-                                hotel['photos'].append(photo_url)
-
-                        # レビューの取得（最大3件、日本語優先）
-                        if 'reviews' in details:
-                            ja_reviews = [r for r in details['reviews'] if r.get('language') == 'ja']
-                            other_reviews = [r for r in details['reviews'] if r.get('language') != 'ja']
-                            selected_reviews = (ja_reviews + other_reviews)[:3]
-                            
-                            for review in selected_reviews:
-                                hotel['reviews'].append({
-                                    'rating': review.get('rating', 0),
-                                    'text': review.get('text', ''),
-                                    'time': review.get('relative_time_description', ''),
-                                    'language': review.get('language', '')
-                                })
-
-                        hotels.append(hotel)
-                        logger.info(f"ホテルを追加: {hotel['name']}")
-
-                    except Exception as e:
-                        logger.warning(f"個別のホテル詳細取得でエラー: {str(e)}")
-                        continue
-
-            except Exception as e:
-                logger.warning(f"検索パラメータ {param} でのホテル検索でエラー: {str(e)}")
-                continue
-
-            if len(hotels) >= 3:  # 十分なホテルが見つかった場合は次の検索条件をスキップ
-                break
-
-        # 評価とレビュー数でスコアを計算してソート
-        for hotel in hotels:
-            hotel['score'] = (hotel['rating'] * math.log10(hotel['total_ratings'] + 1)) / 5.0
-
-        hotels.sort(key=lambda x: x['score'], reverse=True)
+        for place in places_result.get("results", []):
+            # 詳細情報を取得
+            hotel_details = get_hotel_details(place["place_id"])
+            if hotel_details:
+                # price_levelが指定されていない場合は含める
+                if "price_level" not in hotel_details or hotel_details["price_level"] <= max_price_level:
+                    hotels.append(hotel_details)
         
-        # 予算に応じてフィルタリング
-        if budget_per_night:
-            hotels = [h for h in hotels if h['price_level'] <= max_price_level]
-
-        logger.info(f"最終的なホテル件数: {len(hotels)}")
+        # 評価の高い順にソート
+        hotels.sort(key=lambda x: (x.get("rating", 0), x.get("total_ratings", 0)), reverse=True)
         return hotels[:5]  # 上位5件を返す
-
+        
     except Exception as e:
-        logger.error(f"ホテル検索でエラー: {str(e)}")
+        logger.error(f"ホテル検索でエラー: {str(e)}", exc_info=True)
         return []
 
 def format_hotel_info(hotels: List[Dict]) -> str:
@@ -564,41 +795,51 @@ def format_hotel_info(hotels: List[Dict]) -> str:
 
     info = "\n\n## おすすめの宿泊施設\n"
     price_level_map = {
-        0: "不明",
-        1: "お手頃（〜10,000円）",
-        2: "中程度（10,000円〜20,000円）",
-        3: "高級（20,000円〜40,000円）",
-        4: "超高級（40,000円〜）"
+        0: "予算情報なし",
+        1: "お手頃価格（〜15,000円）",
+        2: "中価格帯（15,000円〜30,000円）",
+        3: "高価格帯（30,000円〜50,000円）",
+        4: "超高級（50,000円〜）"
     }
 
-    for i, hotel in enumerate(hotels, 1):
-        info += f"\n### {i}. {hotel['name']}\n"
-        info += f"**評価**: ★{hotel['rating']:.1f} ({hotel['total_ratings']}件のレビュー)\n"
-        info += f"**価格帯**: {price_level_map.get(hotel['price_level'], '不明')}\n"
-        info += f"**住所**: {hotel['formatted_address']}\n"
+    # カテゴリーごとにホテルをグループ化
+    categorized_hotels = {}
+    for hotel in hotels:
+        category = hotel.get('category', 'その他')
+        if category not in categorized_hotels:
+            categorized_hotels[category] = []
+        categorized_hotels[category].append(hotel)
+
+    # カテゴリーごとに表示
+    for category, hotels_in_category in categorized_hotels.items():
+        info += f"\n### ■ {category}タイプ\n"
         
-        if hotel['phone']:
-            info += f"**電話**: {hotel['phone']}\n"
-        
-        if hotel['website']:
-            info += f"**ウェブサイト**: {hotel['website']}\n"
-        
-        if hotel['reviews']:
-            info += "\n**レビュー抜粋**:\n"
-            for review in hotel['reviews']:
-                # 日本語のレビューを優先して表示
-                lang_mark = "🇯🇵" if review['language'] == 'ja' else "🌐"
-                info += f"- {lang_mark} ★{review['rating']} - {review['time']}\n"
-                info += f"  「{review['text'][:150]}」\n"
-                if len(review['text']) > 150:
-                    info += "  ...\n"
-        
-        if hotel['photos']:
-            info += "\n**施設写真**:\n"
-            for photo_url in hotel['photos']:
-                info += f"- {photo_url}\n"
-        
-        info += "\n"
+        # 各カテゴリーで最大2件表示
+        for i, hotel in enumerate(hotels_in_category[:2], 1):
+            info += f"\n#### {i}. {hotel['name']}\n"
+            info += f"**評価**: ★{hotel['rating']:.1f} ({hotel['total_ratings']}件のレビュー)\n"
+            
+            # 価格情報の表示
+            price_level = hotel.get('price_level')
+            price_info = price_level_map.get(price_level, "予算情報なし")
+            info += f"**価格帯**: {price_info}\n"
+            
+            info += f"**住所**: {hotel['formatted_address']}\n"
+            
+            if hotel['phone']:
+                info += f"**電話**: {hotel['phone']}\n"
+            
+            if hotel['website']:
+                info += f"**詳細**: [施設の公式サイトを見る]({hotel['website']})\n"
+            
+            # 特徴や設備情報の表示（もしあれば）
+            if hotel.get('photos'):
+                info += "\n**施設写真**:\n\n"
+                for photo_url in hotel['photos'][:3]:  # 最大3枚まで
+                    info += f"![{hotel['name']}の写真]({photo_url}) "
+                info += "\n\n"
+            
+            info += "---\n"
 
     return info
 
@@ -625,151 +866,481 @@ def add_randomness_to_prompt(prompt: str) -> str:
     
     return f"{prompt}\n\n追加の要望：\n1. {selected_variation}\n2. {selected_time_variation}"
 
-def calculate_per_person_budget(total_budget: int, num_members: int) -> Dict[str, int]:
-    """一人当たりの予算を計算する"""
-    return {
-        "per_person": total_budget,  # 一人当たりの総予算（入力値をそのまま使用）
-        "transport_budget": int(total_budget * 0.3),  # 30%を交通費に
-        "accommodation_budget": int(total_budget * 0.4),  # 40%を宿泊費に
-        "food_budget": int(total_budget * 0.15),  # 15%を食事代に
-        "activity_budget": int(total_budget * 0.1),  # 10%をアクティビティに
-        "extra_budget": int(total_budget * 0.05)  # 5%を予備費に
+# 宿泊グレードの定義
+ACCOMMODATION_GRADES = {
+    "エコノミー": {
+        "description": "リーズナブルな価格で快適な滞在",
+        "price_level": 1
+    },
+    "スタンダード": {
+        "description": "快適さと利便性のバランス",
+        "price_level": 2
+    },
+    "ラグジュアリー": {
+        "description": "高級な設備とサービス",
+        "price_level": 3
+    },
+    "ウルトララグジュアリー": {
+        "description": "最高級の設備とサービス",
+        "price_level": 4
     }
+}
 
-def generate_travel_plan(members: List[Dict], departure: str, month: int, nights: int, budget: int) -> str:
+def generate_travel_plan(members: List[Dict], departure: str, departure_region: str, month: int, nights: int, accommodation_grade: str) -> str:
     try:
         logger.info("旅行プラン生成を開始します")
-        logger.info(f"入力パラメータ: 出発地={departure}, 月={month}, 宿泊数={nights}, 一人当たり予算={budget}円")
-        
+        logger.info(f"入力パラメータ: 出発地={departure}, 地方={departure_region}, 月={month}, 宿泊数={nights}, 宿泊グレード={accommodation_grade}")
+        logger.info(f"メンバー情報: {json.dumps(members, ensure_ascii=False)}")
+
+        # 入力値の検証
+        if not members:
+            raise ValidationError("メンバー情報が必要です")
+        if not departure:
+            raise ValidationError("出発地が必要です")
+        if not departure_region:
+            raise ValidationError("出発地の地方情報が必要です")
+        if not (1 <= month <= 12):
+            raise ValidationError("月は1から12の間で指定してください")
+        if nights < 1:
+            raise ValidationError("宿泊数は1泊以上で指定してください")
+        if accommodation_grade not in ACCOMMODATION_GRADES:
+            valid_grades = "、".join(ACCOMMODATION_GRADES.keys())
+            raise ValidationError(
+                f"有効な宿泊グレードを指定してください。選択可能なグレード：{valid_grades}",
+                details={
+                    "valid_grades": list(ACCOMMODATION_GRADES.keys()),
+                    "provided_grade": accommodation_grade
+                }
+            )
+
         # グループの特性を分析
-        preference_scores = analyze_group_preferences(members)
-        logger.info(f"グループ特性スコア: {preference_scores}")
-        
+        try:
+            preference_scores = analyze_group_preferences(members)
+            logger.info(f"グループ特性スコア: {preference_scores}")
+            
+            # MBTIに基づく特徴を生成
+            mbti_points = generate_mbti_characteristics(members)
+            logger.info(f"MBTI特性: {mbti_points}")
+        except Exception as e:
+            logger.error(f"グループ特性分析でエラー: {str(e)}", exc_info=True)
+            preference_scores = {
+                'activity': 0.5, 
+                'culture': 0.5, 
+                'nature': 0.5, 
+                'urban': 0.5, 
+                'relaxation': 0.5
+            }
+            mbti_points = "グループの多様な性格タイプを考慮した、バランスの取れた旅行プランをご提案します。"
+
         # 目的地を提案
         try:
-            destination = suggest_destinations(departure, month, preference_scores)
-            logger.info(f"提案された目的地: {destination}")
+            destination_data = suggest_destinations(departure, departure_region, preference_scores)
+            logger.info(f"提案された目的地: {destination_data['destination']} ({destination_data['prefecture']})")
+            
+            # 目的地が長すぎる場合は短くする
+            if len(destination_data['destination']) > 20:
+                destination_data['destination'] = destination_data['destination'][:20]
+                logger.warning(f"目的地名が長すぎるため切り詰め: {destination_data['destination']}")
+                
         except Exception as e:
-            raise APIError(f"目的地の提案に失敗しました: {str(e)}")
-        
-        # MBTIタイプに基づく特性を分析
-        mbti_types = [member['mbti'] for member in members]
-        mbti_points = "グループのMBTIタイプ分析：\n"
-        for mbti in mbti_types:
-            if mbti == "ENFP":
-                mbti_points += "- 新しい体験を好み、自由な行動を好む傾向\n"
-            elif mbti == "UNKNOWN":
-                mbti_points += "- 一般的な観光スポットと地元の穴場スポットをバランスよく\n"
-        
-        # 交通手段の詳細を設定
-        transport_info = {
-            "train_duration": "2時間30分",
-            "train_cost": "12000",
-            "train_cost_per": "人",
-            "train_pros": "定時性が高く、移動中も快適",
-            "train_cons": "駅から観光地までの二次交通が必要",
-            
-            "plane_duration": "利用不可",
-            "plane_cost": "利用不可",
-            "plane_cost_per": "人",
-            "plane_pros": "近距離のため利用不推奨",
-            "plane_cons": "近距離のため費用対効果が低い",
-            
-            "car_duration": "3時間00分",
-            "car_cost": "15000",
-            "car_cost_per": "台",
-            "car_pros": "観光地を自由に周遊可能",
-            "car_cons": "交通渋滞の可能性あり、駐車場の確保が必要"
-        }
-        
-        # 基本情報を設定
-        plan_data = {
-            "destination": destination,
-            "destination_features": "自然豊かな温泉地として知られる観光地。河津桜や梅林など季節の花々、浄蓮の滝などの自然スポットが点在。",
-            "seasonal_highlights": f"{month}月は春の訪れを感じる季節。河津桜や梅の花が見頃を迎え、温暖な気候で観光に最適。",
-            "recommended_transport": "東京駅から新幹線で三島駅まで約1時間。その後、伊豆箱根鉄道に乗り換えて修善寺駅へ。",
-            "mbti_points": mbti_points,
-            
-            # 1日目のスケジュール
-            "day1_morning_time": "09:00",
-            "day1_morning_desc": "修善寺温泉街を散策。竹林の小径や修禅寺を訪れる。",
-            "day1_morning_highlights": "風情ある温泉街の雰囲気と歴史的建造物",
-            "day1_morning_duration": "2時間00分",
-            "day1_morning_budget": "0",
-            
-            "day1_afternoon_time": "11:30",
-            "day1_afternoon_desc": "地元の名物料理を堪能した後、河津桜の名所を巡る。",
-            "day1_afternoon_highlights": "季節の花と地元グルメ",
-            "day1_afternoon_duration": "3時間00分",
-            "day1_afternoon_budget": "3000",
-            
-            "day1_evening_time": "15:00",
-            "day1_evening_desc": "温泉旅館でチェックインと夕食",
-            "day1_evening_highlights": "高級旅館の夕食と温泉",
-            "day1_evening_duration": "3時間00分",
-            "day1_evening_budget": "20000",
-            
-            # 2日目のスケジュール
-            "day2_morning_time": "09:00",
-            "day2_morning_desc": "浄蓮の滝と周辺散策",
-            "day2_morning_highlights": "迫力ある滝と自然景観",
-            "day2_morning_duration": "2時間00分",
-            "day2_morning_budget": "500",
-            
-            "day2_afternoon_time": "11:30",
-            "day2_afternoon_desc": "地元の海鮮料理を楽しんだ後、伊豆パノラマパークで絶景を楽しむ",
-            "day2_afternoon_highlights": "新鮮な海の幸と富士山の眺望",
-            "day2_afternoon_duration": "3時間00分",
-            "day2_afternoon_budget": "4000",
-            
-            "day2_evening_time": "15:00",
-            "day2_evening_desc": "お土産購入と帰路",
-            "day2_evening_highlights": "地元の特産品",
-            "day2_evening_duration": "2時間00分",
-            "day2_evening_budget": "3000"
-        }
-        
-        # 交通手段の情報を追加
-        plan_data.update(transport_info)
-        
-        # 予算計算（一人当たり）
-        budget_info = calculate_per_person_budget(budget, len(members))
-        plan_data.update(budget_info)
-        
-        # ホテル情報を取得（一人当たりの宿泊予算で検索）
-        if nights > 0:
+            logger.error(f"目的地の提案でエラー: {str(e)}", exc_info=True)
+            destination_data = {
+                "destination": "東京",
+                "prefecture": "東京都"
+            }
+
+        # 目的地の特徴と季節情報を生成
+        try:
+            destination_prompt = f"""
+以下の条件に基づいて、観光地の特徴と季節の見どころを具体的に説明してください：
+
+観光地: {destination_data['destination']}
+訪問月: {month}月
+グループ特性:
+- アクティビティ志向: {preference_scores['activity']:.2f}
+- 文化的活動志向: {preference_scores['culture']:.2f}
+- 自然志向: {preference_scores['nature']:.2f}
+- 都市的活動志向: {preference_scores['urban']:.2f}
+- リラックス志向: {preference_scores['relaxation']:.2f}
+
+以下の形式でJSON形式で返してください：
+{{
+    "destination_features": "この地域の特徴を3-4行で説明（観光スポット、アクセス、雰囲気など）",
+    "seasonal_highlights": "この月ならではの見どころ、イベント、気候、おすすめの過ごし方を具体的に説明"
+}}
+
+注意点：
+1. 地域の特徴は具体的な観光スポットや体験を含めて説明してください
+2. 季節の見どころは、その月ならではの体験や注意点を詳しく説明してください
+3. グループの特性に合わせた提案を含めてください
+"""
+            logger.info("目的地情報の生成を開始")
+            destination_info = json.loads(generate_content_with_retry(destination_prompt))
+            logger.info(f"生成された目的地情報: {json.dumps(destination_info, ensure_ascii=False, indent=2)}")
+        except Exception as e:
+            logger.error(f"目的地情報の生成に失敗: {str(e)}", exc_info=True)
+            destination_info = {
+                "destination_features": f"{destination_data['destination']}の観光情報を取得できませんでした。",
+                "seasonal_highlights": f"{month}月の季節情報を取得できませんでした。"
+            }
+
+        # 交通手段の詳細を生成
+        try:
+            transport_prompt = f"""
+以下の条件に基づいて、交通手段の詳細情報を生成してください：
+
+出発地: {departure}
+目的地: {destination_data['destination']}
+月: {month}月
+グループ人数: {len(members)}人
+
+以下の形式でJSON形式で返してください：
+{{
+    "recommended_transport": "最適な交通手段の提案と理由",
+    "train_duration": "所要時間（〇時間〇分）",
+    "train_cost": "費用（数字のみ）",
+    "train_cost_per": "人",
+    "train_pros": "電車利用のメリット",
+    "train_cons": "電車利用のデメリット",
+    "plane_duration": "所要時間または利用不可",
+    "plane_cost": "費用または利用不可",
+    "plane_cost_per": "人",
+    "plane_pros": "飛行機利用のメリット",
+    "plane_cons": "飛行機利用のデメリット",
+    "car_duration": "所要時間（〇時間〇分）",
+    "car_cost": "費用（数字のみ）",
+    "car_cost_per": "台",
+    "car_pros": "車利用のメリット",
+    "car_cons": "車利用のデメリット"
+}}
+"""
+            logger.info("交通情報の生成を開始")
+            transport_info = json.loads(generate_content_with_retry(transport_prompt))
+            logger.info(f"生成された交通情報: {json.dumps(transport_info, ensure_ascii=False, indent=2)}")
+        except Exception as e:
+            logger.error(f"交通情報の生成に失敗: {str(e)}", exc_info=True)
+            transport_info = {
+                "recommended_transport": "交通手段の情報を取得できませんでした。",
+                "train_duration": "情報なし",
+                "train_cost": "0",
+                "train_cost_per": "人",
+                "train_pros": "情報なし",
+                "train_cons": "情報なし",
+                "plane_duration": "利用不可",
+                "plane_cost": "利用不可",
+                "plane_cost_per": "人",
+                "plane_pros": "情報なし",
+                "plane_cons": "情報なし",
+                "car_duration": "情報なし",
+                "car_cost": "0",
+                "car_cost_per": "台",
+                "car_pros": "情報なし",
+                "car_cons": "情報なし"
+            }
+
+        # 宿泊施設の検索
+        try:
+            # 宿泊グレードの情報を取得
+            grade_info = ACCOMMODATION_GRADES[accommodation_grade]
+            grade_description = grade_info["description"]
+
             hotels = get_hotel_recommendations(
-                location=destination,
-                max_price_level=3,
-                budget_per_night=budget_info["accommodation_budget"]
+                location=destination_data['destination'],
+                max_price_level=grade_info["price_level"]
             )
+            
             if hotels:
-                hotel = hotels[0]  # 最初のホテルを使用
-                plan_data.update({
-                    "hotel_name": hotel.get("name", "情報なし"),
-                    "hotel_type": "温泉旅館",
-                    "hotel_budget": str(budget_info["accommodation_budget"]),
-                    "hotel_features": "温泉、日本庭園、会席料理",
-                    "hotel_details": format_hotel_info([hotel])
-                })
+                hotel = hotels[0]  # 最も評価の高いホテルを選択
+                hotel_info = {
+                    "hotel_name": hotel['name'],
+                    "hotel_type": hotel['category'],
+                    "hotel_features": f"評価: ★{hotel['rating']} ({hotel['total_ratings']}件のレビュー)",
+                    "hotel_details": format_hotel_info(hotels),
+                    "accommodation_grade": accommodation_grade,
+                    "grade_description": grade_description
+                }
             else:
-                plan_data.update({
-                    "hotel_name": "情報なし",
+                hotel_info = {
+                    "hotel_name": "条件に合う宿泊施設が見つかりませんでした",
                     "hotel_type": "情報なし",
-                    "hotel_budget": str(budget_info["accommodation_budget"]),
                     "hotel_features": "情報なし",
-                    "hotel_details": "宿泊施設の詳細情報は利用できません。"
-                })
+                    "hotel_details": "宿泊施設の詳細情報は現在利用できません",
+                    "accommodation_grade": accommodation_grade,
+                    "grade_description": grade_description
+                }
+        except Exception as e:
+            logger.error(f"宿泊施設の検索でエラー: {str(e)}", exc_info=True)
+            hotel_info = {
+                "hotel_name": "宿泊施設の検索中にエラーが発生しました",
+                "hotel_type": "情報なし",
+                "hotel_features": "情報なし",
+                "hotel_details": "宿泊施設の詳細情報は現在利用できません",
+                "accommodation_grade": accommodation_grade,
+                "grade_description": ACCOMMODATION_GRADES[accommodation_grade]["description"]
+            }
+
+        # 観光プランの生成
+        try:
+            # 1日目のプラン生成
+            itinerary_prompt_day1 = f"""
+以下の条件に基づいて、1日目の観光プランを生成してください：
+
+目的地: {destination_data['destination']}
+月: {month}月
+グループ特性:
+- アクティビティ志向: {preference_scores['activity']:.2f}
+- 文化的活動志向: {preference_scores['culture']:.2f}
+- 自然志向: {preference_scores['nature']:.2f}
+- 都市的活動志向: {preference_scores['urban']:.2f}
+- リラックス志向: {preference_scores['relaxation']:.2f}
+
+以下の形式でJSON形式で返してください：
+{{
+    "morning": {{
+        "time": "9:00",
+        "description": "午前の活動の詳細な説明（1日目）",
+        "highlights": "主な見どころ",
+        "duration": "2時間30分"
+    }},
+    "afternoon": {{
+        "time": "13:00",
+        "description": "午後の活動の詳細な説明（1日目）",
+        "highlights": "主な見どころ",
+        "duration": "3時間"
+    }},
+    "evening": {{
+        "time": "18:00",
+        "description": "夜の活動の詳細な説明（1日目）",
+        "highlights": "主な見どころ",
+        "duration": "2時間"
+    }}
+}}
+
+注意点：
+- 1日目は主要な観光スポットや人気の場所を中心に提案してください
+- 時間帯に合わせた適切なアクティビティを提案してください
+- 移動時間も考慮してください
+"""
+            itinerary_day1 = json.loads(generate_content_with_retry(itinerary_prompt_day1))
+            
+            # 2日目のプラン生成（1日目とは異なるプラン）
+            itinerary_prompt_day2 = f"""
+以下の条件に基づいて、2日目の観光プランを生成してください：
+
+目的地: {destination_data['destination']}
+月: {month}月
+1日目の訪問場所：
+- 午前：{itinerary_day1["morning"]["description"]}
+- 午後：{itinerary_day1["afternoon"]["description"]}
+- 夜：{itinerary_day1["evening"]["description"]}
+
+グループ特性:
+- アクティビティ志向: {preference_scores['activity']:.2f}
+- 文化的活動志向: {preference_scores['culture']:.2f}
+- 自然志向: {preference_scores['nature']:.2f}
+- 都市的活動志向: {preference_scores['urban']:.2f}
+- リラックス志向: {preference_scores['relaxation']:.2f}
+
+以下の形式でJSON形式で返してください：
+{{
+    "morning": {{
+        "time": "9:00",
+        "description": "午前の活動の詳細な説明（2日目・1日目とは異なる場所）",
+        "highlights": "主な見どころ",
+        "duration": "2時間30分"
+    }},
+    "afternoon": {{
+        "time": "13:00",
+        "description": "午後の活動の詳細な説明（2日目・1日目とは異なる場所）",
+        "highlights": "主な見どころ",
+        "duration": "3時間"
+    }},
+    "evening": {{
+        "time": "18:00",
+        "description": "夜の活動の詳細な説明（2日目・1日目とは異なる場所）",
+        "highlights": "主な見どころ",
+        "duration": "2時間"
+    }}
+}}
+
+注意点：
+- 1日目とは異なる観光スポットや体験を提案してください
+- 穴場スポットや地元ならではの体験を中心に提案してください
+- 時間帯に合わせた適切なアクティビティを提案してください
+- 移動時間も考慮してください
+"""
+            itinerary_day2 = json.loads(generate_content_with_retry(itinerary_prompt_day2))
+            
+            # 1日目の予定を設定
+            day1_schedule = {
+                "day1_morning_time": itinerary_day1["morning"]["time"],
+                "day1_morning_desc": itinerary_day1["morning"]["description"],
+                "day1_morning_highlights": itinerary_day1["morning"]["highlights"],
+                "day1_morning_duration": itinerary_day1["morning"]["duration"],
+                
+                "day1_afternoon_time": itinerary_day1["afternoon"]["time"],
+                "day1_afternoon_desc": itinerary_day1["afternoon"]["description"],
+                "day1_afternoon_highlights": itinerary_day1["afternoon"]["highlights"],
+                "day1_afternoon_duration": itinerary_day1["afternoon"]["duration"],
+                
+                "day1_evening_time": itinerary_day1["evening"]["time"],
+                "day1_evening_desc": itinerary_day1["evening"]["description"],
+                "day1_evening_highlights": itinerary_day1["evening"]["highlights"],
+                "day1_evening_duration": itinerary_day1["evening"]["duration"]
+            }
+            
+            # 2日目の予定を設定（独自のプラン）
+            day2_schedule = {
+                "day2_morning_time": itinerary_day2["morning"]["time"],
+                "day2_morning_desc": itinerary_day2["morning"]["description"],
+                "day2_morning_highlights": itinerary_day2["morning"]["highlights"],
+                "day2_morning_duration": itinerary_day2["morning"]["duration"],
+                
+                "day2_afternoon_time": itinerary_day2["afternoon"]["time"],
+                "day2_afternoon_desc": itinerary_day2["afternoon"]["description"],
+                "day2_afternoon_highlights": itinerary_day2["afternoon"]["highlights"],
+                "day2_afternoon_duration": itinerary_day2["afternoon"]["duration"],
+                
+                "day2_evening_time": itinerary_day2["evening"]["time"],
+                "day2_evening_desc": itinerary_day2["evening"]["description"],
+                "day2_evening_highlights": itinerary_day2["evening"]["highlights"],
+                "day2_evening_duration": itinerary_day2["evening"]["duration"]
+            }
+            
+        except Exception as e:
+            logger.error(f"観光プラン生成でエラー: {str(e)}", exc_info=True)
+            # デフォルトのスケジュール
+            day1_schedule = {
+                "day1_morning_time": "9:00",
+                "day1_morning_desc": "観光プランの生成中にエラーが発生しました",
+                "day1_morning_highlights": "情報なし",
+                "day1_morning_duration": "情報なし",
+                
+                "day1_afternoon_time": "13:00",
+                "day1_afternoon_desc": "観光プランの生成中にエラーが発生しました",
+                "day1_afternoon_highlights": "情報なし",
+                "day1_afternoon_duration": "情報なし",
+                
+                "day1_evening_time": "18:00",
+                "day1_evening_desc": "観光プランの生成中にエラーが発生しました",
+                "day1_evening_highlights": "情報なし",
+                "day1_evening_duration": "情報なし"
+            }
+            day2_schedule = {
+                "day2_morning_time": "9:00",
+                "day2_morning_desc": "観光プランの生成中にエラーが発生しました",
+                "day2_morning_highlights": "情報なし",
+                "day2_morning_duration": "情報なし",
+                
+                "day2_afternoon_time": "13:00",
+                "day2_afternoon_desc": "観光プランの生成中にエラーが発生しました",
+                "day2_afternoon_highlights": "情報なし",
+                "day2_afternoon_duration": "情報なし",
+                
+                "day2_evening_time": "18:00",
+                "day2_evening_desc": "観光プランの生成中にエラーが発生しました",
+                "day2_evening_highlights": "情報なし",
+                "day2_evening_duration": "情報なし"
+            }
+
+        # 全ての情報を統合
+        plan_data = {
+            "destination": destination_data['destination'],
+            "prefecture": destination_data['prefecture'],
+            "mbti_points": mbti_points,  # MBTIポイントを追加
+            **destination_info,
+            **transport_info,
+            **hotel_info,
+            **day1_schedule,
+            **day2_schedule
+        }
+
+        # デバッグ用に各データの内容を出力
+        logger.info("=== プランデータの内容 ===")
+        logger.info(f"destination: {destination_data['destination']}")
+        logger.info(f"prefecture: {destination_data['prefecture']}")
+        logger.info(f"destination_info: {json.dumps(destination_info, ensure_ascii=False, indent=2)}")
+        logger.info(f"transport_info: {json.dumps(transport_info, ensure_ascii=False, indent=2)}")
         
         # テンプレートに適用
-        template = Template(TRAVEL_PLAN_TEMPLATE)
-        formatted_plan = template.safe_substitute(plan_data)
+        try:
+            # 全ての値を文字列に変換し、Noneを適切なデフォルト値に置換
+            formatted_data = {}
+            for k, v in plan_data.items():
+                if v is None:
+                    formatted_data[k] = "情報なし"
+                else:
+                    try:
+                        formatted_data[k] = str(v)
+                    except Exception as str_err:
+                        logger.error(f"値の文字列変換でエラー - キー: {k}, 値: {v}, エラー: {str(str_err)}")
+                        formatted_data[k] = "情報なし"
+            
+            logger.info("=== フォーマット済みデータ ===")
+            logger.info(f"フォーマット済みデータの長さ: {len(formatted_data)}")
+            logger.info(f"フォーマット済みデータのキー: {', '.join(formatted_data.keys())}")
+            
+            # テンプレート内の全ての変数が存在するか確認
+            template = Template(TRAVEL_PLAN_TEMPLATE)
+            template_vars = []
+            for v in Template.pattern.findall(TRAVEL_PLAN_TEMPLATE):
+                var_name = v[1] or v[2]
+                template_vars.append(var_name)
+                
+            logger.info(f"テンプレート内の変数数: {len(template_vars)}")
+            logger.info(f"テンプレート内の変数: {', '.join(template_vars)}")
+            
+            missing_vars = [var for var in template_vars if var not in formatted_data]
+            
+            if missing_vars:
+                logger.warning(f"テンプレートに存在するが、データにない変数: {', '.join(missing_vars)}")
+                for var in missing_vars:
+                    formatted_data[var] = "情報なし"
+            
+            try:
+                formatted_plan = template.safe_substitute(formatted_data)
+                logger.info(f"テンプレート適用結果の長さ: {len(formatted_plan)}")
+                logger.info("テンプレートの適用が完了しました")
+            except Exception as template_err:
+                logger.error(f"テンプレート置換でエラー: {str(template_err)}", exc_info=True)
+                raise TravelPlanError(
+                    message="テンプレートの置換処理でエラーが発生しました",
+                    error_code="TEMPLATE_ERROR",
+                    details={"error": str(template_err)}
+                )
+            
+        except Exception as e:
+            logger.error(f"テンプレート適用でエラー: {str(e)}", exc_info=True)
+            logger.error("=== 利用可能な変数 ===")
+            for key in plan_data.keys():
+                logger.error(f"{key}")
+            raise TravelPlanError(
+                message="テンプレートの適用に失敗しました",
+                error_code="TEMPLATE_ERROR",
+                details={"error": str(e), "available_variables": list(plan_data.keys())}
+            )
         
         logger.info("旅行プランの生成が完了しました")
         return formatted_plan
         
+    except ValidationError as e:
+        logger.error(f"入力値の検証でエラー: {str(e)}")
+        raise
+    except APIError as e:
+        logger.error(f"API呼び出しでエラー: {str(e)}")
+        raise
+    except BudgetError as e:
+        logger.error(f"予算計算でエラー: {str(e)}")
+        raise
+    except json.JSONDecodeError as e:
+        logger.error(f"JSONパースエラー: {str(e)}")
+        raise TravelPlanError(
+            message="JSONデータの処理に失敗しました",
+            error_code="JSON_PARSE_ERROR",
+            details={"error": str(e)}
+        )
     except Exception as e:
-        logger.error(f"旅行プラン生成でエラー: {str(e)}")
+        logger.error(f"予期せぬエラー: {str(e)}", exc_info=True)
         raise TravelPlanError(
             message="旅行プランの生成に失敗しました",
             error_code="GENERATION_ERROR",
