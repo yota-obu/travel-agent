@@ -139,59 +139,59 @@ async def create_travel_plan(request: TravelRequest):
             request.budget
         )
 
-        return TravelResponse(
-            travel_plan=travel_plan
-        )
+        return {
+            "travel_plan": travel_plan
+        }
 
     except ValidationError as e:
         return JSONResponse(
             status_code=422,
-            content=ErrorResponse(
-                message=e.message,
-                error_code=e.error_code,
-                details=e.details
-            ).model_dump()
+            content={
+                "message": e.message,
+                "error_code": e.error_code,
+                "details": e.details
+            }
         )
     
     except BudgetError as e:
         return JSONResponse(
             status_code=400,
-            content=ErrorResponse(
-                message=e.message,
-                error_code=e.error_code,
-                details=e.details
-            ).model_dump()
+            content={
+                "message": e.message,
+                "error_code": e.error_code,
+                "details": e.details
+            }
         )
     
     except APIError as e:
         return JSONResponse(
             status_code=503,
-            content=ErrorResponse(
-                message=e.message,
-                error_code=e.error_code,
-                details=e.details
-            ).model_dump()
+            content={
+                "message": e.message,
+                "error_code": e.error_code,
+                "details": e.details
+            }
         )
     
     except TravelPlanError as e:
         return JSONResponse(
             status_code=400,
-            content=ErrorResponse(
-                message=e.message,
-                error_code=e.error_code,
-                details=e.details
-            ).model_dump()
+            content={
+                "message": e.message,
+                "error_code": e.error_code,
+                "details": e.details
+            }
         )
     
     except Exception as e:
         logger.error(f"予期せぬエラー: {str(e)}")
         return JSONResponse(
             status_code=500,
-            content=ErrorResponse(
-                message="予期せぬエラーが発生しました",
-                error_code="INTERNAL_SERVER_ERROR",
-                details={"error": str(e)}
-            ).model_dump()
+            content={
+                "message": "予期せぬエラーが発生しました",
+                "error_code": "INTERNAL_SERVER_ERROR",
+                "details": {"error": str(e)}
+            }
         )
 
 @app.get("/")
